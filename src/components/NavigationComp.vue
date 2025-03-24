@@ -246,6 +246,32 @@
             <SparklesIcon class="icon" />
           </router-link>
         </div>
+        <div v-if="store.isBackendReachable">
+          <router-link
+            to="/vnc"
+            class="nav-button"
+            active-class="active-nav-button"
+            :title="$t('components.navigation.vnc')"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="icon"
+            >
+              <path d="M4 8h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z" />
+              <path d="M12 6l-3 3 3 3 3-3-3-3z" />
+              <path d="M9 13v4" />
+              <path d="M15 13v4" />
+            </svg>
+          </router-link>
+        </div>
         <button
           @click="store.showSettings = true"
           class="nav-button"

@@ -16,6 +16,7 @@ import SwitchPage from '@/views/SwitchPage.vue';
 import Flatassistant from '@/views/FlatassistantPage.vue';
 import StellariumView from '@/views/StellariumView.vue';
 import { useSettingsStore } from '@/store/settingsStore';
+import VncClient from '@/views/VncClient.vue';
 
 const routes = [
   {
@@ -42,6 +43,7 @@ const routes = [
   { path: '/switch', component: SwitchPage, meta: { requiresSetup: true } },
   { path: '/flats', component: Flatassistant, meta: { requiresSetup: true } },
   { path: '/stellarium', component: StellariumView, meta: { requiresSetup: true } },
+  { path: '/vnc', component: VncClient, meta: { requiresSetup: true } },
 ];
 
 const router = createRouter({
