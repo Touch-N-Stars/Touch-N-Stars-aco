@@ -61,6 +61,7 @@ import stellariumCredits from '@/components/stellarium/stellariumCredits.vue';
 import SelectedObject from '@/components/stellarium/SelectedObject.vue';
 import stellariumSettings from '@/components/stellarium/stellariumSettings.vue';
 import stellariumClock from '@/components/stellarium/stellariumClock.vue';
+import { Capacitor } from '@capacitor/core';
 
 const store = apiStore();
 const framingStore = useFramingStore();
@@ -77,6 +78,7 @@ const wasmPath = '/stellarium-js/stellarium-web-engine.wasm';
 const isSearchVisible = ref(false);
 const searchComponent = ref(null);
 const mountComponent = ref(null);
+const isIOS = Capacitor.getPlatform() === 'ios';
 
 // Funktion zum Ein-/Ausblenden des Suchfeldes
 function toggleSearch() {
@@ -115,6 +117,19 @@ onMounted(async () => {
   //NINA vorbereiten
   await store.fetchProfilInfos();
 
+  // iOS-specific optimizations - prepare canvas
+  if (isIOS) {
+    if (stelCanvas.value) {
+      // Set lower resolution or ratio for iOS for better performance
+      const scale = 0.8; // Use a slightly reduced size for iOS
+      const container = stelCanvas.value.parentElement;
+      if (container) {
+        stelCanvas.value.width = container.clientWidth * scale;
+        stelCanvas.value.height = container.clientHeight * scale;
+      }
+    }
+  }
+
   // Schritt 1) Stellarium-Web-Engine-Skript dynamisch laden
   const script = document.createElement('script');
   script.src = '/stellarium-js/stellarium-web-engine.js';
@@ -134,9 +149,36 @@ onMounted(async () => {
       const wasmArrayBuffer = await response.arrayBuffer();
       console.log('WASM-Datei erfolgreich geladen. Größe (Byte):', wasmArrayBuffer.byteLength);
 
+      // Configure WebGL options based on platform
+      const webGLOptions = {
+        powerPreference: isIOS ? 'low-power' : 'high-performance',
+        preserveDrawingBuffer: false,
+        antialias: !isIOS, // Disable antialiasing on iOS for better performance
+        depth: true,
+        failIfMajorPerformanceCaveat: false,
+      };
+
+      // Pre-initialize WebGL context with optimized settings for iOS
+      if (isIOS && stelCanvas.value) {
+        const gl = stelCanvas.value.getContext('webgl', webGLOptions);
+        if (gl) {
+          // Lower precision for better performance on iOS
+          const fragShaderPrecision = gl.getShaderPrecisionFormat(
+            gl.FRAGMENT_SHADER,
+            gl.MEDIUM_FLOAT
+          );
+          if (fragShaderPrecision) {
+            console.log('Using medium precision for WebGL on iOS');
+          }
+
+          // Set texture size limits for iOS
+          const maxTextureSize = Math.min(1024, gl.getParameter(gl.MAX_TEXTURE_SIZE));
+          console.log('Max texture size for iOS:', maxTextureSize);
+        }
+      }
+
       window.StelWebEngine({
         wasmFile: wasmPath,
-
         canvas: stelCanvas.value,
         onReady(stel) {
           console.log('Stellarium ist bereit!');
@@ -176,18 +218,37 @@ onMounted(async () => {
 
           //Daten hinzufügen
           core.stars.addDataSource({ url: baseUrl + 'stars' });
-          core.skycultures.addDataSource({ url: baseUrl + 'skycultures/western', key: 'western' });
-          core.dsos.addDataSource({ url: baseUrl + 'dso' });
-          core.dss.addDataSource({ url: baseUrl + 'surveys/dss' });
-          //core.landscapes.addDataSource({ url: baseUrl + 'landscapes/guereins', key: 'guereins' });
-          //core.landscapes.addDataSource({ url: baseUrl + 'landscapes/gray', key: 'guereins' });
-          core.milkyway.addDataSource({ url: baseUrl + 'surveys/milkyway' });
-          core.minor_planets.addDataSource({ url: baseUrl + 'mpcorb.dat', key: 'mpc_asteroids' });
-          core.planets.addDataSource({ url: baseUrl + 'surveys/sso/moon', key: 'moon' });
-          core.planets.addDataSource({ url: baseUrl + 'surveys/sso/sun', key: 'sun' });
-          core.planets.addDataSource({ url: baseUrl + 'surveys/sso', key: 'default' });
-          core.comets.addDataSource({ url: baseUrl + 'CometEls.txt', key: 'mpc_comets' });
-          // core.satellites.addDataSource({url: baseUrl + 'tle_satellite.jsonl.gz',key: 'jsonl/sat', });
+
+          // Load fewer resources on iOS for better performance
+          if (isIOS) {
+            // On iOS, only load essential data sources
+            core.planets.addDataSource({ url: baseUrl + 'surveys/sso', key: 'default' });
+            core.milkyway.addDataSource({ url: baseUrl + 'surveys/milkyway' });
+
+            // If texture size can be reduced on iOS
+            if (core.dss) core.dss.tile_texture_size = 256; // Lower from default 512
+            if (core.milkyway) core.milkyway.tile_texture_size = 256;
+
+            // Disable unnecessary features on iOS to save resources
+            stellariumStore.stellarium.equatorialLinesVisible = false;
+            stellariumStore.stellarium.azimuthalLinesVisible = false;
+            stellariumStore.stellarium.eclipticLinesVisible = false;
+            stellariumStore.stellarium.meridianLinesVisible = false;
+          } else {
+            // Load all data sources on other platforms
+            core.skycultures.addDataSource({
+              url: baseUrl + 'skycultures/western',
+              key: 'western',
+            });
+            core.dsos.addDataSource({ url: baseUrl + 'dso' });
+            core.dss.addDataSource({ url: baseUrl + 'surveys/dss' });
+            core.milkyway.addDataSource({ url: baseUrl + 'surveys/milkyway' });
+            core.minor_planets.addDataSource({ url: baseUrl + 'mpcorb.dat', key: 'mpc_asteroids' });
+            core.planets.addDataSource({ url: baseUrl + 'surveys/sso/moon', key: 'moon' });
+            core.planets.addDataSource({ url: baseUrl + 'surveys/sso/sun', key: 'sun' });
+            core.planets.addDataSource({ url: baseUrl + 'surveys/sso', key: 'default' });
+            core.comets.addDataSource({ url: baseUrl + 'CometEls.txt', key: 'mpc_comets' });
+          }
 
           stellariumStore.updateStellariumCore();
 
@@ -238,15 +299,47 @@ onBeforeUnmount(() => {
   if (stellariumStore.stel) {
     console.log('Stellarium wird zerstört...');
 
-    // Entferne die Stellarium-Instanz
-    stellariumStore.stel = null;
+    // iOS specific cleanup to prevent memory leaks
+    if (isIOS) {
+      try {
+        // Clean up core resources
+        if (stellariumStore.stel.core) {
+          const core = stellariumStore.stel.core;
+          // Stop time animation
+          core.time_speed = 0;
 
-    // Lösche das Canvas-Element (optional, falls nötig)
+          // Clean up data sources
+          if (core.stars) core.stars.removeDataSources();
+          if (core.planets) core.planets.removeDataSources();
+          if (core.milkyway) core.milkyway.removeDataSources();
+
+          // Release references
+          core.observer = null;
+          core.selection = null;
+        }
+      } catch (e) {
+        console.error('iOS cleanup error:', e);
+      }
+    }
+
+    // Release WebGL context
     if (stelCanvas.value) {
+      try {
+        const gl = stelCanvas.value.getContext('webgl');
+        if (gl && gl.getExtension('WEBGL_lose_context')) {
+          gl.getExtension('WEBGL_lose_context').loseContext();
+        }
+      } catch (e) {
+        console.error('WebGL context release error:', e);
+      }
+
+      // Reset canvas dimensions
       stelCanvas.value.width = 0;
       stelCanvas.value.height = 0;
     }
 
+    // Set instance to null
+    stellariumStore.stel = null;
     console.log('Stellarium erfolgreich beendet.');
   }
 });

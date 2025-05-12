@@ -255,15 +255,14 @@
             </svg>
           </router-link>
         </div>
-        <div v-if="store.isBackendReachable && !isIOS">
-          <router-link
-            to="/"
+        <div v-if="store.isBackendReachable">
+          <button
             class="nav-button"
             :class="{ 'active-nav-button': store.showStellarium }"
-            @click="store.showStellarium = true"
+            @click="activateStellarium"
           >
             <SparklesIcon class="icon" />
-          </router-link>
+          </button>
         </div>
         <button
           @click="store.showSettings = true"
@@ -292,7 +291,7 @@ import {
   SparklesIcon,
 } from '@heroicons/vue/24/outline';
 import { watch, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { apiStore } from '@/store/store';
 import { useSequenceStore } from '@/store/sequenceStore';
 import { useSettingsStore } from '@/store/settingsStore';
@@ -305,12 +304,28 @@ const sequenceStore = useSequenceStore();
 const settingsStore = useSettingsStore();
 const pluginStore = usePluginStore();
 const route = useRoute();
+const router = useRouter();
 const selectedInstanceId = computed(() => settingsStore.selectedInstanceId);
 const isIOS = computed(() => Capacitor.getPlatform() === 'ios');
 
 const activeInstanceColor = computed(() =>
   settingsStore.getInstanceColorById(selectedInstanceId.value)
 );
+
+function activateStellarium() {
+  // For iOS, make sure to cleanup any previous instance
+  if (isIOS.value && store.showStellarium) {
+    store.showStellarium = false;
+    // Add a small delay before reactivating
+    setTimeout(() => {
+      store.showStellarium = true;
+      router.push('/');
+    }, 300);
+  } else {
+    store.showStellarium = true;
+    router.push('/');
+  }
+}
 
 watch(
   () => route.path,
