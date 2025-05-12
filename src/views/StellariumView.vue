@@ -117,17 +117,9 @@ onMounted(async () => {
   //NINA vorbereiten
   await store.fetchProfilInfos();
 
-  // iOS-specific optimizations - prepare canvas
+  // Minimal iOS preparation - avoid interference with Stellarium's own initialization
   if (isIOS) {
-    if (stelCanvas.value) {
-      // Set lower resolution or ratio for iOS for better performance
-      const scale = 0.8; // Use a slightly reduced size for iOS
-      const container = stelCanvas.value.parentElement;
-      if (container) {
-        stelCanvas.value.width = container.clientWidth * scale;
-        stelCanvas.value.height = container.clientHeight * scale;
-      }
-    }
+    console.log('iOS preparation for Stellarium');
   }
 
   // Schritt 1) Stellarium-Web-Engine-Skript dynamisch laden
@@ -149,34 +141,7 @@ onMounted(async () => {
       const wasmArrayBuffer = await response.arrayBuffer();
       console.log('WASM-Datei erfolgreich geladen. Größe (Byte):', wasmArrayBuffer.byteLength);
 
-      // Configure WebGL options based on platform
-      const webGLOptions = {
-        powerPreference: isIOS ? 'low-power' : 'high-performance',
-        preserveDrawingBuffer: false,
-        antialias: !isIOS, // Disable antialiasing on iOS for better performance
-        depth: true,
-        failIfMajorPerformanceCaveat: false,
-      };
-
-      // Pre-initialize WebGL context with optimized settings for iOS
-      if (isIOS && stelCanvas.value) {
-        const gl = stelCanvas.value.getContext('webgl', webGLOptions);
-        if (gl) {
-          // Lower precision for better performance on iOS
-          const fragShaderPrecision = gl.getShaderPrecisionFormat(
-            gl.FRAGMENT_SHADER,
-            gl.MEDIUM_FLOAT
-          );
-          if (fragShaderPrecision) {
-            console.log('Using medium precision for WebGL on iOS');
-          }
-
-          // Set texture size limits for iOS
-          const maxTextureSize = Math.min(1024, gl.getParameter(gl.MAX_TEXTURE_SIZE));
-          console.log('Max texture size for iOS:', maxTextureSize);
-        }
-      }
-
+      // Let Stellarium handle its own initialization without interference
       window.StelWebEngine({
         wasmFile: wasmPath,
         canvas: stelCanvas.value,
@@ -190,7 +155,6 @@ onMounted(async () => {
           stel.core.observer.elevation = store.profileInfo.AstrometrySettings.Elevation;
 
           console.log('zeit', stel.core.observer.utc);
-          //stel.core.observer.tt = 0
           console.log('Aktuelle Beobachterposition:');
           console.log(
             'Breitengrad:',
@@ -216,24 +180,18 @@ onMounted(async () => {
           stellariumStore.baseUrl = baseUrl;
           const core = stel.core;
 
-          //Daten hinzufügen
+          //Daten hinzufügen - always load stars
           core.stars.addDataSource({ url: baseUrl + 'stars' });
-
-          // Load fewer resources on iOS for better performance
+          
+          // For iOS, load a minimal but sufficient set of data sources
           if (isIOS) {
-            // On iOS, only load essential data sources
+            core.skycultures.addDataSource({
+              url: baseUrl + 'skycultures/western',
+              key: 'western',
+            });
+            core.planets.addDataSource({ url: baseUrl + 'surveys/sso/moon', key: 'moon' });
+            core.planets.addDataSource({ url: baseUrl + 'surveys/sso/sun', key: 'sun' });
             core.planets.addDataSource({ url: baseUrl + 'surveys/sso', key: 'default' });
-            core.milkyway.addDataSource({ url: baseUrl + 'surveys/milkyway' });
-
-            // If texture size can be reduced on iOS
-            if (core.dss) core.dss.tile_texture_size = 256; // Lower from default 512
-            if (core.milkyway) core.milkyway.tile_texture_size = 256;
-
-            // Disable unnecessary features on iOS to save resources
-            stellariumStore.stellarium.equatorialLinesVisible = false;
-            stellariumStore.stellarium.azimuthalLinesVisible = false;
-            stellariumStore.stellarium.eclipticLinesVisible = false;
-            stellariumStore.stellarium.meridianLinesVisible = false;
           } else {
             // Load all data sources on other platforms
             core.skycultures.addDataSource({
@@ -295,52 +253,29 @@ onMounted(async () => {
   };
   document.head.appendChild(script);
 });
+
 onBeforeUnmount(() => {
   if (stellariumStore.stel) {
     console.log('Stellarium wird zerstört...');
-
-    // iOS specific cleanup to prevent memory leaks
-    if (isIOS) {
-      try {
-        // Clean up core resources
-        if (stellariumStore.stel.core) {
-          const core = stellariumStore.stel.core;
-          // Stop time animation
-          core.time_speed = 0;
-
-          // Clean up data sources
-          if (core.stars) core.stars.removeDataSources();
-          if (core.planets) core.planets.removeDataSources();
-          if (core.milkyway) core.milkyway.removeDataSources();
-
-          // Release references
-          core.observer = null;
-          core.selection = null;
-        }
-      } catch (e) {
-        console.error('iOS cleanup error:', e);
-      }
+    
+    // Simple cleanup approach that should work on all platforms
+    if (stellariumStore.stel && stellariumStore.stel.core) {
+      // Stop time animation first
+      stellariumStore.stel.core.time_speed = 0;
     }
-
-    // Release WebGL context
-    if (stelCanvas.value) {
-      try {
-        const gl = stelCanvas.value.getContext('webgl');
-        if (gl && gl.getExtension('WEBGL_lose_context')) {
-          gl.getExtension('WEBGL_lose_context').loseContext();
-        }
-      } catch (e) {
-        console.error('WebGL context release error:', e);
+    
+    // On iOS, add a small delay before final cleanup
+    setTimeout(() => {
+      // Resize canvas to release memory
+      if (stelCanvas.value) {
+        stelCanvas.value.width = 0;
+        stelCanvas.value.height = 0;
       }
-
-      // Reset canvas dimensions
-      stelCanvas.value.width = 0;
-      stelCanvas.value.height = 0;
-    }
-
-    // Set instance to null
-    stellariumStore.stel = null;
-    console.log('Stellarium erfolgreich beendet.');
+      
+      // Clear reference
+      stellariumStore.stel = null;
+      console.log('Stellarium erfolgreich beendet.');
+    }, isIOS ? 100 : 0);
   }
 });
 </script>
