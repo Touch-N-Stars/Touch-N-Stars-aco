@@ -11,16 +11,7 @@
       <div class="relative z-10 px-6 py-8">
         <div class="max-w-7xl mx-auto">
           <!-- Dashboard Title Bar -->
-          <div class="flex items-center justify-end mb-8">
-            <div class="flex items-center space-x-4">
-              <div
-                class="flex items-center space-x-2 bg-gray-800/80 backdrop-blur-sm rounded-lg px-3 py-2"
-              >
-                <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-                <span class="text-sm text-gray-300">Live Status</span>
-              </div>
-            </div>
-          </div>
+          <div class="mb-8"></div>
 
           <!-- Control Panel -->
           <div
@@ -46,6 +37,11 @@
     <!-- Floating Action Buttons -->
     <div class="fixed right-6 z-20" style="bottom: calc(env(safe-area-inset-bottom, 0px) + 80px)">
       <div class="flex flex-col space-y-3">
+        <FavTargets
+          :show-framning="false"
+          class="transform transition-all duration-300 hover:scale-105"
+        />
+
         <button
           @click="toggleEdit"
           class="group relative p-4 bg-gradient-to-r from-blue-600 to-blue-500 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
@@ -59,18 +55,10 @@
             {{ sequenceStore.sequenceEdit ? 'Exit Edit Mode' : 'Enter Edit Mode' }}
           </div>
         </button>
-
-        <FavTargets
-          :show-framning="false"
-          class="transform transition-all duration-300 hover:scale-105"
-        />
       </div>
     </div>
 
-    <div
-      class="fixed left-6 z-20 bg-gray-800/80 backdrop-blur-sm rounded-full p-2 shadow-xl border border-gray-700/50"
-      style="bottom: calc(env(safe-area-inset-bottom, 0px) + 80px)"
-    >
+    <div class="fixed left-6 z-20" style="bottom: calc(env(safe-area-inset-bottom, 0px) + 80px)">
       <infoModal
         :size="'w-8 h-8'"
         :icon-text-colour="'text-white'"

@@ -1,7 +1,15 @@
 <template>
   <div class="flex items-center">
-    <button @click="openModal" class="text-blue-500 hover:text-gray-300">
+    <button
+      @click="openModal"
+      class="group relative p-4 bg-gradient-to-r from-gray-600 to-gray-500 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+    >
       <component :is="icon" :class="[size, iconTextColour]" />
+      <div
+        class="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+      >
+        Information
+      </div>
     </button>
   </div>
   <div>

@@ -331,18 +331,63 @@ function getOverallProgress() {
   const containers = sequenceStore.sequenceInfo.slice(1);
   if (containers.length === 0) return 0;
 
-  let totalItems = 0;
-  let completedItems = 0;
+  // Filter out disabled containers
+  const activeContainers = containers.filter((container) => container.Status !== 'DISABLED');
+  if (activeContainers.length === 0) return 0;
 
-  containers.forEach((container) => {
-    if (container.Items) {
-      const { total, completed } = countItemsProgress(container.Items);
-      totalItems += total;
-      completedItems += completed;
+  let totalWeight = 0;
+  let completedWeight = 0;
+
+  activeContainers.forEach((container) => {
+    totalWeight += 1;
+
+    if (container.Status === 'FINISHED') {
+      // Finished containers contribute full weight
+      completedWeight += 1;
+    } else if (container.Status === 'RUNNING') {
+      // Running containers contribute partial weight based on sub-items
+      if (container.Items && container.Items.length > 0) {
+        const containerProgress = calculateContainerProgress(container);
+        completedWeight += containerProgress / 100;
+      } else {
+        // Running container with no sub-items gets 50% weight
+        completedWeight += 0.5;
+      }
+    } else if (container.Status === 'CREATED') {
+      // Created containers contribute 0 weight
+      completedWeight += 0;
     }
   });
 
-  return totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+  return totalWeight > 0 ? Math.round((completedWeight / totalWeight) * 100) : 0;
+}
+
+function calculateContainerProgress(container) {
+  if (container.Status === 'FINISHED') {
+    return 100;
+  }
+
+  if (container.Status === 'DISABLED') {
+    return 0; // Don't count disabled items
+  }
+
+  if (!container.Items || container.Items.length === 0) {
+    // Leaf item - base on status
+    switch (container.Status) {
+      case 'FINISHED':
+        return 100;
+      case 'RUNNING':
+        return 50; // Or calculate based on sub-progress
+      case 'CREATED':
+        return 0;
+      default:
+        return 0;
+    }
+  }
+
+  // Container with sub-items - calculate based on sub-item progress
+  const { total, completed } = countItemsProgress(container.Items);
+  return total > 0 ? Math.round((completed / total) * 100) : 0;
 }
 
 function countItemsProgress(items) {
@@ -350,12 +395,21 @@ function countItemsProgress(items) {
   let completed = 0;
 
   items.forEach((item) => {
+    // Skip disabled items from progress calculation
+    if (item.Status === 'DISABLED') return;
+
     total++;
-    if (item.Status === 'FINISHED') completed++;
-    if (item.Items) {
+    if (item.Status === 'FINISHED') {
+      completed++;
+    } else if (item.Items && item.Items.length > 0) {
+      // For containers with sub-items, calculate weighted progress
       const { total: subTotal, completed: subCompleted } = countItemsProgress(item.Items);
-      total += subTotal;
-      completed += subCompleted;
+      if (subTotal > 0) {
+        // Subtract the 1 we added above and add weighted progress
+        total--;
+        total += subTotal;
+        completed += subCompleted;
+      }
     }
   });
 
@@ -417,10 +471,8 @@ function findRunningTargetStatus(items) {
 }
 
 function getContainerProgress(container) {
-  if (!container.Items || container.Items.length === 0) return 0;
-
-  const { total, completed } = countItemsProgress(container.Items);
-  return total > 0 ? Math.round((completed / total) * 100) : 0;
+  // Use the new container progress calculation
+  return calculateContainerProgress(container);
 }
 
 function getContainerDescription(name) {
