@@ -54,43 +54,8 @@
 
   <!-- Main Monitoring Content -->
   <div class="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 p-4">
-    <!-- Dashboard Header -->
-    <div class="max-w-7xl mx-auto mb-8">
-      <div class="flex items-center justify-between">
-        <div>
-          <h1 class="text-3xl font-bold text-white mb-2">Sequence Monitoring</h1>
-          <p class="text-gray-400">Real-time sequence execution monitoring</p>
-        </div>
-        <div
-          class="flex items-center space-x-2 bg-gray-800/80 backdrop-blur-sm rounded-lg px-3 py-2"
-        >
-          <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-          <span class="text-sm text-gray-300">Live Monitoring</span>
-        </div>
-      </div>
-    </div>
-
     <!-- Enhanced Monitoring Grid -->
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Sequence Progress Card -->
-      <div
-        class="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 shadow-2xl"
-      >
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-semibold text-gray-100">Sequence Progress</h2>
-          <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-            <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fill-rule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-        <SequenceImage />
-      </div>
-
       <!-- Image History Card -->
       <div
         class="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 shadow-2xl"
@@ -149,7 +114,6 @@
 
 <script setup>
 import { ref } from 'vue';
-import SequenceImage from '@/components/sequence/SequenceImage.vue';
 import SequenceImageHistory from '@/components/sequence/SequenceImageHistory.vue';
 import SequenzGraph from '@/components/sequence/SequenzGraph.vue';
 import MonitorViewSetting from '@/components/sequence/MonitorViewSetting.vue';

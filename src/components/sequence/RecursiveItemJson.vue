@@ -1,9 +1,9 @@
 <template>
-  <div class="space-y-4">
+  <div class="space-y-3 sm:space-y-4">
     <div
       v-for="(item, index) in items"
       :key="index"
-      class="group relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-xl shadow-lg border transition-all duration-300 hover:shadow-xl"
+      class="group relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-xl shadow-lg border transition-all duration-300 hover:shadow-xl overflow-hidden"
       :class="{
         'border-blue-400/60 shadow-blue-500/20 bg-gradient-to-br from-blue-900/20 to-blue-800/20':
           item.Status === 'RUNNING' && !hasRunningChildren(item),
@@ -31,16 +31,16 @@
         }"
       ></div>
 
-      <div class="p-4 md:p-6">
+      <div class="p-3 sm:p-4 md:p-6">
         <!-- Header Section with improved visual hierarchy -->
         <div
-          class="flex flex-wrap items-start justify-between gap-3 mb-4 pb-3 border-b border-gray-700/50"
+          class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-3 mb-4 pb-3 border-b border-gray-700/50"
         >
-          <div class="flex-1 min-w-0">
-            <div class="flex items-start space-x-3">
+          <div class="flex-1 min-w-0 overflow-hidden">
+            <div class="flex items-start space-x-2 sm:space-x-3 min-w-0">
               <!-- Icon based on item type -->
               <div
-                class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
+                class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center"
                 :class="{
                   'bg-blue-500/20 text-blue-400': item.Status === 'RUNNING',
                   'bg-green-500/20 text-green-400': item.Status === 'FINISHED',
@@ -52,7 +52,7 @@
               >
                 <svg
                   v-if="item.Name && item.Name.includes('Belichtung')"
-                  class="w-5 h-5"
+                  class="w-4 h-4 sm:w-5 sm:h-5"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -64,7 +64,7 @@
                 </svg>
                 <svg
                   v-else-if="item.Name && item.Name.includes('Filter')"
-                  class="w-5 h-5"
+                  class="w-4 h-4 sm:w-5 sm:h-5"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -78,7 +78,7 @@
                   v-else-if="
                     item.Name && (item.Name.includes('Teleskop') || item.Name.includes('Mount'))
                   "
-                  class="w-5 h-5"
+                  class="w-4 h-4 sm:w-5 sm:h-5"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -89,7 +89,7 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-                <svg v-else class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <svg v-else class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     fill-rule="evenodd"
                     d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
@@ -99,32 +99,34 @@
               </div>
 
               <div class="flex-1 min-w-0">
-                <h3 class="font-semibold text-white text-base md:text-lg leading-tight break-words">
+                <h3
+                  class="font-semibold text-white text-sm sm:text-base md:text-lg leading-tight break-words"
+                >
                   {{ removeSuffix(item.Name) }}
                 </h3>
-                <p v-if="getItemDescription(item)" class="text-gray-400 text-sm mt-1">
+                <p v-if="getItemDescription(item)" class="text-gray-400 text-xs sm:text-sm mt-1">
                   {{ getItemDescription(item) }}
                 </p>
               </div>
             </div>
           </div>
 
-          <div class="flex items-center space-x-2">
+          <div class="flex items-center justify-end space-x-1 sm:space-x-2 mt-2 sm:mt-0 min-w-0">
             <!-- Progress indicator for exposures -->
-            <div v-if="item.ExposureCount" class="text-right mr-3">
+            <div v-if="item.ExposureCount" class="text-right mr-1 sm:mr-2 flex-shrink-0">
               <div class="text-xs text-gray-400">Exposures</div>
-              <div class="text-sm font-medium text-white">{{ item.ExposureCount }}</div>
+              <div class="text-xs sm:text-sm font-medium text-white">{{ item.ExposureCount }}</div>
             </div>
 
             <!-- Status badge with improved styling -->
             <span
               v-if="isTopLevel"
-              class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200"
+              class="inline-flex items-center px-1.5 py-0.5 sm:px-3 sm:py-1.5 rounded-full text-xs font-medium border transition-all duration-200 flex-shrink-0 whitespace-nowrap"
               :class="statusColorClasses(item.Status)"
             >
               <span
                 v-if="item.Status === 'RUNNING'"
-                class="w-2 h-2 bg-current rounded-full animate-pulse mr-2"
+                class="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-current rounded-full animate-pulse mr-1 sm:mr-2"
               ></span>
               {{ item.Status }}
             </span>
@@ -133,20 +135,24 @@
 
         <!-- Enhanced Details Grid with better organization -->
         <div v-if="getDisplayFields(item).length > 0" class="mb-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
             <div
               v-for="[key, value] in getDisplayFields(item)"
               :key="key"
-              class="bg-gray-800/50 rounded-lg p-3 border border-gray-700/50"
+              class="bg-gray-800/50 rounded-lg p-2 sm:p-3 border border-gray-700/50"
             >
               <div class="flex flex-col space-y-1">
                 <span class="text-xs font-medium text-gray-400 uppercase tracking-wide">{{
                   key
                 }}</span>
-                <span class="text-sm text-white break-all">
+                <span class="text-xs sm:text-sm text-white break-all">
                   <template v-if="key === 'CalculatedWaitDuration'">
-                    <div class="flex items-center space-x-2">
-                      <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="flex items-center space-x-1 sm:space-x-2">
+                      <svg
+                        class="w-3 h-3 sm:w-4 sm:h-4 text-blue-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
                         <path
                           fill-rule="evenodd"
                           d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
@@ -157,8 +163,12 @@
                     </div>
                   </template>
                   <template v-else-if="key === 'TargetTime'">
-                    <div class="flex items-center space-x-2">
-                      <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="flex items-center space-x-1 sm:space-x-2">
+                      <svg
+                        class="w-3 h-3 sm:w-4 sm:h-4 text-green-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
                         <path
                           fill-rule="evenodd"
                           d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
@@ -169,14 +179,14 @@
                     </div>
                   </template>
                   <template v-else-if="key === 'Coordinates'">
-                    <div class="space-y-2">
+                    <div class="space-y-1 sm:space-y-2">
                       <div class="flex items-center justify-between">
-                        <span class="text-blue-300 font-medium">RA:</span>
-                        <span class="font-mono">{{ formatRA(value) }}</span>
+                        <span class="text-blue-300 font-medium text-xs sm:text-sm">RA:</span>
+                        <span class="font-mono text-xs sm:text-sm">{{ formatRA(value) }}</span>
                       </div>
                       <div class="flex items-center justify-between">
-                        <span class="text-blue-300 font-medium">Dec:</span>
-                        <span class="font-mono">{{ formatDec(value) }}</span>
+                        <span class="text-blue-300 font-medium text-xs sm:text-sm">Dec:</span>
+                        <span class="font-mono text-xs sm:text-sm">{{ formatDec(value) }}</span>
                       </div>
                     </div>
                   </template>
@@ -185,7 +195,7 @@
                       <template v-for="[subKey, subValue] in Object.entries(value)" :key="subKey">
                         <div class="flex items-center justify-between">
                           <span class="text-gray-400 text-xs">{{ subKey }}:</span>
-                          <span class="text-white text-sm">{{ subValue }}</span>
+                          <span class="text-white text-xs sm:text-sm">{{ subValue }}</span>
                         </div>
                       </template>
                     </div>
@@ -211,7 +221,7 @@
             ></div>
           </div>
 
-          <div class="ml-4 border-l border-gray-700/50 pl-4 space-y-3">
+          <div class="ml-2 sm:ml-4 border-l border-gray-700/50 pl-2 sm:pl-4 space-y-3">
             <RecursiveItemState
               v-if="sequenceStore.sequenceIsEditable"
               :items="item.Items"
@@ -227,8 +237,10 @@
 
         <!-- Enhanced Triggers Section -->
         <div v-if="item.Triggers?.length" class="mt-4 pt-4 border-t border-gray-700/50">
-          <h4 class="text-sm font-semibold text-amber-300 mb-3 flex items-center space-x-2">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <h4
+            class="text-xs sm:text-sm font-semibold text-amber-300 mb-3 flex items-center space-x-2"
+          >
+            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fill-rule="evenodd"
                 d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
@@ -241,17 +253,17 @@
             <div
               v-for="(trigger, tIndex) in item.Triggers"
               :key="tIndex"
-              class="bg-gradient-to-r from-amber-900/20 to-amber-800/20 rounded-lg p-3 border border-amber-600/30"
+              class="bg-gradient-to-r from-amber-900/20 to-amber-800/20 rounded-lg p-2 sm:p-3 border border-amber-600/30"
             >
-              <div class="flex items-center justify-between mb-2">
-                <h5 class="font-medium text-amber-200">{{ trigger.Name }}</h5>
+              <div class="flex items-center justify-between mb-1 sm:mb-2">
+                <h5 class="font-medium text-amber-200 text-xs sm:text-sm">{{ trigger.Name }}</h5>
                 <span
                   class="text-xs px-2 py-1 bg-amber-500/20 text-amber-300 rounded-full border border-amber-500/30"
                 >
                   {{ trigger.Status }}
                 </span>
               </div>
-              <div v-if="trigger.AfterExposures" class="text-sm text-gray-300">
+              <div v-if="trigger.AfterExposures" class="text-xs sm:text-sm text-gray-300">
                 <span class="text-amber-400">After:</span> {{ trigger.AfterExposures }} exposures
               </div>
             </div>
@@ -260,8 +272,10 @@
 
         <!-- Enhanced Conditions Section -->
         <div v-if="item.Conditions?.length" class="mt-4 pt-4 border-t border-gray-700/50">
-          <h4 class="text-sm font-semibold text-purple-300 mb-3 flex items-center space-x-2">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <h4
+            class="text-xs sm:text-sm font-semibold text-purple-300 mb-3 flex items-center space-x-2"
+          >
+            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fill-rule="evenodd"
                 d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 001.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z"
@@ -274,17 +288,17 @@
             <div
               v-for="(condition, cIndex) in item.Conditions"
               :key="cIndex"
-              class="bg-gradient-to-r from-purple-900/20 to-purple-800/20 rounded-lg p-3 border border-purple-600/30"
+              class="bg-gradient-to-r from-purple-900/20 to-purple-800/20 rounded-lg p-2 sm:p-3 border border-purple-600/30"
             >
-              <div class="flex items-center justify-between mb-2">
-                <h5 class="font-medium text-purple-200">{{ condition.Name }}</h5>
+              <div class="flex items-center justify-between mb-1 sm:mb-2">
+                <h5 class="font-medium text-purple-200 text-xs sm:text-sm">{{ condition.Name }}</h5>
                 <span
                   class="text-xs px-2 py-1 bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30"
                 >
                   {{ condition.Status }}
                 </span>
               </div>
-              <div v-if="condition.Iterations" class="text-sm text-gray-300">
+              <div v-if="condition.Iterations" class="text-xs sm:text-sm text-gray-300">
                 <span class="text-purple-400">Progress:</span>
                 {{ condition.CompletedIterations || 0 }} / {{ condition.Iterations }} iterations
                 <div class="w-full bg-gray-700 rounded-full h-1.5 mt-1">
