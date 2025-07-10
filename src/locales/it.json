@@ -279,7 +279,9 @@
         "running": "Corsa",
         "sequenceStatus": "Stato di sequenza",
         "systemWideAutomation": "Regole di automazione a livello di sistema",
-        "totalContainers": "Contenitori totali"
+        "totalContainers": "Contenitori totali",
+        "currentlyImaging": "Attualmente imaging",
+        "waitingToStart": "In attesa di iniziare"
       },
       "tooltip": {
         "resetSequence": "Ripristina lo stato di sequenza",

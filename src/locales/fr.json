@@ -279,7 +279,9 @@
         "running": "En cours d'exécution",
         "sequenceStatus": "Statut de séquence",
         "systemWideAutomation": "Règles d'automatisation à l'échelle du système",
-        "totalContainers": "Conteneurs totaux"
+        "totalContainers": "Conteneurs totaux",
+        "currentlyImaging": "Actuellement imagerie",
+        "waitingToStart": "En attente de commencer"
       },
       "tooltip": {
         "resetSequence": "Réinitialiser l'état de séquence",

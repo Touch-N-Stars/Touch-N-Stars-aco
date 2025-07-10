@@ -460,7 +460,9 @@
         "running": "Correndo",
         "sequenceStatus": "Status da sequência",
         "systemWideAutomation": "Regras de automação em todo o sistema",
-        "totalContainers": "Total de contêineres"
+        "totalContainers": "Total de contêineres",
+        "currentlyImaging": "Atualmente imagens",
+        "waitingToStart": "Esperando para começar"
       },
       "tooltip": {
         "resetSequence": "Redefinir estado de sequência",

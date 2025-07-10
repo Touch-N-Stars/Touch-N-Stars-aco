@@ -279,7 +279,9 @@
         "currentImage": "Current Image",
         "imageHistory": "Image History",
         "expand": "Expand",
-        "collapse": "Collapse"
+        "collapse": "Collapse",
+        "currentlyImaging": "Currently imaging",
+        "waitingToStart": "Waiting to start"
       },
       "tooltip": {
         "startSequence": "Start the imaging sequence",

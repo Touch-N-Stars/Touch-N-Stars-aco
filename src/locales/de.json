@@ -279,7 +279,9 @@
         "running": "Läuft",
         "sequenceStatus": "Sequenzstatus",
         "systemWideAutomation": "Systemweite Automatisierung",
-        "totalContainers": "Gesamtzahl Behälter"
+        "totalContainers": "Gesamtzahl Behälter",
+        "currentlyImaging": "Derzeit Bildgebung",
+        "waitingToStart": "Ich warte auf zu beginnen"
       },
       "tooltip": {
         "resetSequence": "Sequenz zurücksetzen",

@@ -279,7 +279,9 @@
         "running": "Running",
         "sequenceStatus": "Sequence Status",
         "systemWideAutomation": "System-wide automation rules",
-        "totalContainers": "Total Containers"
+        "totalContainers": "Total Containers",
+        "currentlyImaging": "Currently imaging",
+        "waitingToStart": "Waiting to start"
       },
       "tooltip": {
         "resetSequence": "Reset sequence state",
