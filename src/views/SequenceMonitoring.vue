@@ -41,7 +41,9 @@
             </svg>
             <span>{{ $t('components.sequence.monitor.settings.title') }}</span>
           </h3>
-          <p class="text-gray-400 text-sm mt-2">Configure monitoring display preferences</p>
+          <p class="text-gray-400 text-sm mt-2">
+            {{ $t('components.sequence.status.configureMonitoringDisplay') }}
+          </p>
         </div>
 
         <!-- Enhanced Modal Content -->
@@ -56,12 +58,35 @@
   <div class="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 p-4">
     <!-- Enhanced Monitoring Grid -->
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Current Sequence Image Card -->
+      <div
+        class="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 shadow-2xl"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-gray-100">
+            {{ $t('components.sequence.status.currentImage') }}
+          </h2>
+          <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+        <LastSequenceImg />
+      </div>
+
       <!-- Image History Card -->
       <div
         class="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 shadow-2xl"
       >
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-semibold text-gray-100">Image History</h2>
+          <h2 class="text-xl font-semibold text-gray-100">
+            {{ $t('components.sequence.imageHistory') }}
+          </h2>
           <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
             <svg class="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
               <path
@@ -114,6 +139,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import LastSequenceImg from '@/components/sequence/LastSequenceImg.vue';
 import SequenceImageHistory from '@/components/sequence/SequenceImageHistory.vue';
 import SequenzGraph from '@/components/sequence/SequenzGraph.vue';
 import MonitorViewSetting from '@/components/sequence/MonitorViewSetting.vue';

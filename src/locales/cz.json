@@ -261,7 +261,31 @@
         "oldest": "nejstarší první",
         "sort": "Seřadit"
       },
-      "time": "Čas"
+      "time": "Čas",
+      "status": {
+        "collapse": "Collapse",
+        "complete": "Complete",
+        "completed": "Completed",
+        "configureMonitoringDisplay": "Configure monitoring display preferences",
+        "currentImage": "Current Image",
+        "currentTarget": "Current Target",
+        "expand": "Expand",
+        "global": "GLOBAL",
+        "globalTriggers": "Global Triggers",
+        "imageHistory": "Image History",
+        "noActiveTarget": "No active target",
+        "overallProgress": "Overall Progress",
+        "progress": "Progress",
+        "running": "Running",
+        "sequenceStatus": "Sequence Status",
+        "systemWideAutomation": "System-wide automation rules",
+        "totalContainers": "Total Containers"
+      },
+      "tooltip": {
+        "resetSequence": "Reset sequence state",
+        "startSequence": "Start the imaging sequence",
+        "stopSequence": "Stop the current sequence"
+      }
     },
     "mount": {
       "title": "Montáž",

@@ -442,7 +442,31 @@
       "time": "Tempo",
       "title": "Sequência",
       "triggers": "Gatilhos",
-      "type": "Tipo"
+      "type": "Tipo",
+      "status": {
+        "collapse": "Colapso",
+        "complete": "Completo",
+        "completed": "Concluído",
+        "configureMonitoringDisplay": "Configurar preferências de exibição de monitoramento",
+        "currentImage": "Imagem atual",
+        "currentTarget": "Alvo atual",
+        "expand": "Expandir",
+        "global": "GLOBAL",
+        "globalTriggers": "Gatilhos globais",
+        "imageHistory": "História da imagem",
+        "noActiveTarget": "Nenhum alvo ativo",
+        "overallProgress": "Progresso geral",
+        "progress": "Progresso",
+        "running": "Correndo",
+        "sequenceStatus": "Status da sequência",
+        "systemWideAutomation": "Regras de automação em todo o sistema",
+        "totalContainers": "Total de contêineres"
+      },
+      "tooltip": {
+        "resetSequence": "Redefinir estado de sequência",
+        "startSequence": "Inicie a sequência de imagem",
+        "stopSequence": "Pare a sequência atual"
+      }
     },
     "settings": {
       "add": "Adicionar",

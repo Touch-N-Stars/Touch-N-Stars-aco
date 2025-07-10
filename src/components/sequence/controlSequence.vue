@@ -25,7 +25,7 @@
           ]"
           @click="startSequence"
           :disabled="sequenceStore.sequenceRunning"
-          v-tooltip="'Start the imaging sequence'"
+          v-tooltip="$t('components.sequence.tooltip.startSequence')"
         >
           <span v-if="sequenceStore.sequenceRunning" class="animate-spin mr-2">&#9696;</span>
           <svg
@@ -51,7 +51,7 @@
         <button
           class="btn-primary bg-gradient-to-br from-red-600 to-red-500 hover:from-red-700 hover:to-red-600"
           @click="stopSequence"
-          v-tooltip="'Stop the current sequence'"
+          v-tooltip="$t('components.sequence.tooltip.stopSequence')"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +72,7 @@
           class="btn-primary bg-gradient-to-br from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600"
           @click="showResetConfirmation = true"
           :disabled="sequenceStore.sequenceRunning"
-          v-tooltip="'Reset sequence state'"
+          v-tooltip="$t('components.sequence.tooltip.resetSequence')"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

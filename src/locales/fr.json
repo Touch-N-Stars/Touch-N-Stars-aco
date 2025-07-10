@@ -261,7 +261,31 @@
         "oldest": "le plus ancien premier",
         "sort": "Trier"
       },
-      "time": "Temps"
+      "time": "Temps",
+      "status": {
+        "collapse": "Effondrement",
+        "complete": "Complet",
+        "completed": "Complété",
+        "configureMonitoringDisplay": "Configurer les préférences d'affichage de surveillance",
+        "currentImage": "Image actuelle",
+        "currentTarget": "Cible actuelle",
+        "expand": "Développer",
+        "global": "MONDIAL",
+        "globalTriggers": "Déclencheurs mondiaux",
+        "imageHistory": "Historique de l'image",
+        "noActiveTarget": "Aucune cible active",
+        "overallProgress": "Progrès global",
+        "progress": "Progrès",
+        "running": "En cours d'exécution",
+        "sequenceStatus": "Statut de séquence",
+        "systemWideAutomation": "Règles d'automatisation à l'échelle du système",
+        "totalContainers": "Conteneurs totaux"
+      },
+      "tooltip": {
+        "resetSequence": "Réinitialiser l'état de séquence",
+        "startSequence": "Démarrer la séquence d'imagerie",
+        "stopSequence": "Arrêtez la séquence actuelle"
+      }
     },
     "mount": {
       "title": "Monture",

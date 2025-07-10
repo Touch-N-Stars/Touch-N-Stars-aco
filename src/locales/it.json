@@ -261,7 +261,31 @@
         "oldest": "prima più antico",
         "sort": "Ordinare"
       },
-      "time": "Tempo"
+      "time": "Tempo",
+      "status": {
+        "collapse": "Crollo",
+        "complete": "Completare",
+        "completed": "Completato",
+        "configureMonitoringDisplay": "Configurare le preferenze di visualizzazione del monitoraggio",
+        "currentImage": "Immagine corrente",
+        "currentTarget": "Target attuale",
+        "expand": "Espandere",
+        "global": "GLOBALE",
+        "globalTriggers": "Trigger globali",
+        "imageHistory": "Storia dell'immagine",
+        "noActiveTarget": "Nessun target attivo",
+        "overallProgress": "Progressi complessivi",
+        "progress": "Progressi",
+        "running": "Corsa",
+        "sequenceStatus": "Stato di sequenza",
+        "systemWideAutomation": "Regole di automazione a livello di sistema",
+        "totalContainers": "Contenitori totali"
+      },
+      "tooltip": {
+        "resetSequence": "Ripristina lo stato di sequenza",
+        "startSequence": "Avvia la sequenza di imaging",
+        "stopSequence": "Fermare la sequenza corrente"
+      }
     },
     "mount": {
       "title": "Montatura",

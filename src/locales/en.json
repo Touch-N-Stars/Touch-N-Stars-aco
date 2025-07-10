@@ -261,7 +261,31 @@
         "oldest": "oldest first",
         "newest": "newest first"
       },
-      "time": "Time"
+      "time": "Time",
+      "status": {
+        "sequenceStatus": "Sequence Status",
+        "totalContainers": "Total Containers",
+        "running": "Running",
+        "completed": "Completed",
+        "progress": "Progress",
+        "overallProgress": "Overall Progress",
+        "currentTarget": "Current Target",
+        "noActiveTarget": "No active target",
+        "globalTriggers": "Global Triggers",
+        "systemWideAutomation": "System-wide automation rules",
+        "global": "GLOBAL",
+        "complete": "Complete",
+        "configureMonitoringDisplay": "Configure monitoring display preferences",
+        "currentImage": "Current Image",
+        "imageHistory": "Image History",
+        "expand": "Expand",
+        "collapse": "Collapse"
+      },
+      "tooltip": {
+        "startSequence": "Start the imaging sequence",
+        "stopSequence": "Stop the current sequence",
+        "resetSequence": "Reset sequence state"
+      }
     },
     "mount": {
       "title": "Mount",

@@ -7,7 +7,9 @@
         class="bg-gradient-to-br from-blue-900/40 to-blue-800/40 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/20"
       >
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-semibold text-blue-100">Sequence Status</h3>
+          <h3 class="text-lg font-semibold text-blue-100">
+            {{ $t('components.sequence.status.sequenceStatus') }}
+          </h3>
           <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
             <svg class="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
               <path
@@ -20,15 +22,17 @@
         </div>
         <div class="space-y-2">
           <div class="flex justify-between">
-            <span class="text-gray-300">Total Containers:</span>
+            <span class="text-gray-300">
+              {{ $t('components.sequence.status.totalContainers') }}:
+            </span>
             <span class="text-white font-medium">{{ sequenceStore.sequenceInfo.length - 1 }}</span>
           </div>
           <div class="flex justify-between">
-            <span class="text-gray-300">Running:</span>
+            <span class="text-gray-300">{{ $t('components.sequence.status.running') }}:</span>
             <span class="text-blue-400 font-medium">{{ getStatusCount('RUNNING') }}</span>
           </div>
           <div class="flex justify-between">
-            <span class="text-gray-300">Completed:</span>
+            <span class="text-gray-300">{{ $t('components.sequence.status.completed') }}:</span>
             <span class="text-green-400 font-medium">{{ getStatusCount('FINISHED') }}</span>
           </div>
         </div>
@@ -39,7 +43,9 @@
         class="bg-gradient-to-br from-purple-900/40 to-purple-800/40 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20"
       >
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-semibold text-purple-100">Progress</h3>
+          <h3 class="text-lg font-semibold text-purple-100">
+            {{ $t('components.sequence.status.progress') }}
+          </h3>
           <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
             <svg class="w-6 h-6 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
               <path
@@ -59,7 +65,9 @@
           </div>
           <div class="text-center">
             <span class="text-2xl font-bold text-white">{{ getOverallProgress() }}%</span>
-            <p class="text-gray-400 text-sm">Overall Progress</p>
+            <p class="text-gray-400 text-sm">
+              {{ $t('components.sequence.status.overallProgress') }}
+            </p>
           </div>
         </div>
       </div>
@@ -69,7 +77,9 @@
         class="bg-gradient-to-br from-green-900/40 to-green-800/40 backdrop-blur-sm rounded-2xl p-6 border border-green-500/20"
       >
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-semibold text-green-100">Current Target</h3>
+          <h3 class="text-lg font-semibold text-green-100">
+            {{ $t('components.sequence.status.currentTarget') }}
+          </h3>
           <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
             <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 20 20">
               <path
@@ -81,7 +91,9 @@
           </div>
         </div>
         <div class="space-y-2">
-          <p class="text-xl font-bold text-white">{{ getCurrentTarget() || 'No active target' }}</p>
+          <p class="text-xl font-bold text-white">
+            {{ getCurrentTarget() || $t('components.sequence.status.noActiveTarget') }}
+          </p>
           <p class="text-gray-400 text-sm">{{ getCurrentTargetStatus() }}</p>
         </div>
       </div>
@@ -100,7 +112,11 @@
             <button
               @click="sequenceStore.toggleCollapsedState('GlobalTrigger')"
               class="p-2 rounded-xl hover:bg-amber-500/20 transition-all duration-200 group"
-              :title="sequenceStore.isCollapsed('GlobalTrigger') ? 'Expand' : 'Collapse'"
+              :title="
+                sequenceStore.isCollapsed('GlobalTrigger')
+                  ? $t('components.sequence.status.expand')
+                  : $t('components.sequence.status.collapse')
+              "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -125,16 +141,18 @@
                     clip-rule="evenodd"
                   />
                 </svg>
-                <span>Global Triggers</span>
+                <span>{{ $t('components.sequence.status.globalTriggers') }}</span>
               </h2>
-              <p class="text-amber-300/80 text-sm">System-wide automation rules</p>
+              <p class="text-amber-300/80 text-sm">
+                {{ $t('components.sequence.status.systemWideAutomation') }}
+              </p>
             </div>
           </div>
           <div class="flex items-center space-x-2">
             <div
               class="px-4 py-2 bg-amber-500/20 text-amber-100 font-medium rounded-full text-sm border border-amber-500/30"
             >
-              GLOBAL
+              {{ $t('components.sequence.status.global') }}
             </div>
           </div>
         </div>
@@ -184,7 +202,11 @@
               <button
                 @click="sequenceStore.toggleCollapsedState(container.Name)"
                 class="p-2 rounded-xl hover:bg-gray-700/50 transition-all duration-200 group"
-                :title="sequenceStore.isCollapsed(container.Name) ? 'Expand' : 'Collapse'"
+                :title="
+                  sequenceStore.isCollapsed(container.Name)
+                    ? $t('components.sequence.status.expand')
+                    : $t('components.sequence.status.collapse')
+                "
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -220,7 +242,8 @@
               <!-- Progress indicator for this container -->
               <div v-if="container.Items && container.Items.length" class="text-right">
                 <div class="text-xs text-gray-400">
-                  {{ getContainerProgress(container) }}% Complete
+                  {{ getContainerProgress(container) }}%
+                  {{ $t('components.sequence.status.complete') }}
                 </div>
                 <div class="w-20 bg-gray-700 rounded-full h-1 mt-1">
                   <div

@@ -261,7 +261,31 @@
         "oldest": "älteste zuerst",
         "newest": "neueste zuerst"
       },
-      "time": "Zeit"
+      "time": "Zeit",
+      "status": {
+        "collapse": "Einklappen",
+        "complete": "Abgeschlossen",
+        "completed": "Abgeschlossen",
+        "configureMonitoringDisplay": "Konfigurieren Sie die Anzeigeeinstellungen der Überwachung",
+        "currentImage": "Aktuelles Bild",
+        "currentTarget": "Aktuelles Ziel",
+        "expand": "Expandieren",
+        "global": "Global",
+        "globalTriggers": "Globale Auslöser",
+        "imageHistory": "Bildverlauf",
+        "noActiveTarget": "Kein aktives Ziel",
+        "overallProgress": "Gesamtfortschritt",
+        "progress": "Fortschritt",
+        "running": "Läuft",
+        "sequenceStatus": "Sequenzstatus",
+        "systemWideAutomation": "Systemweite Automatisierung",
+        "totalContainers": "Gesamtzahl Behälter"
+      },
+      "tooltip": {
+        "resetSequence": "Sequenz zurücksetzen",
+        "startSequence": "Seqeunz starten",
+        "stopSequence": "Stoppen Sie die aktuelle Sequenz"
+      }
     },
     "mount": {
       "title": "Montierung",
