@@ -154,6 +154,20 @@
               {{ getCurrentTarget() || $t('components.sequence.status.noActiveTarget') }}
             </p>
             <p class="text-gray-400 text-sm">{{ getCurrentTargetStatus() }}</p>
+
+            <div v-if="getMeridianFlipTime()" class="flex items-center space-x-2 text-sm">
+              <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span class="text-yellow-300">
+                {{ $t('components.sequence.status.meridianFlip') }}:
+                {{ formatMeridianFlipTime(getMeridianFlipTime()) }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -415,6 +429,74 @@ function findRunningTargetStatus(items) {
     }
   }
   return null;
+}
+
+function getMeridianFlipTime() {
+  // First check if there are global triggers with meridian flip information
+  if (sequenceStore.sequenceInfo.length > 0) {
+    const firstItem = sequenceStore.sequenceInfo[0];
+    if (firstItem && firstItem.GlobalTriggers) {
+      for (const trigger of firstItem.GlobalTriggers) {
+        if (trigger.TimeToMeridianFlip !== undefined && trigger.TimeToMeridianFlip !== null) {
+          return trigger.TimeToMeridianFlip;
+        }
+      }
+    }
+  }
+
+  // Fallback: check containers and items (existing logic)
+  const containers = sequenceStore.sequenceInfo.slice(1);
+
+  for (const container of containers) {
+    if (container.TimeToMeridianFlip !== undefined && container.TimeToMeridianFlip !== null) {
+      return container.TimeToMeridianFlip;
+    }
+    if (container.Items) {
+      const flipTime = findMeridianFlipTime(container.Items);
+      if (flipTime !== null) return flipTime;
+    }
+  }
+  return null;
+}
+
+function findMeridianFlipTime(items) {
+  for (const item of items) {
+    if (item.TimeToMeridianFlip !== undefined && item.TimeToMeridianFlip !== null) {
+      return item.TimeToMeridianFlip;
+    }
+    if (item.Items) {
+      const flipTime = findMeridianFlipTime(item.Items);
+      if (flipTime !== null) return flipTime;
+    }
+  }
+  return null;
+}
+
+function formatMeridianFlipTime(timeToFlip) {
+  if (timeToFlip === null || timeToFlip === undefined) return '';
+
+  // If it's a time string (e.g., "HH:MM:SS"), return as is
+  if (typeof timeToFlip === 'string') {
+    return timeToFlip;
+  }
+
+  // If it's a number (minutes or seconds), format accordingly
+  if (typeof timeToFlip === 'number') {
+    if (timeToFlip < 0) {
+      return 'Past flip time';
+    }
+
+    const hours = Math.floor(timeToFlip / 60);
+    const minutes = Math.floor(timeToFlip % 60);
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else {
+      return `${minutes}m`;
+    }
+  }
+
+  return timeToFlip.toString();
 }
 </script>
 

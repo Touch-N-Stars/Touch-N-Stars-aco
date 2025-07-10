@@ -271,6 +271,8 @@
         "overallProgress": "Overall Progress",
         "currentTarget": "Current Target",
         "noActiveTarget": "No active target",
+        "meridianFlip": "Meridian flip",
+        "pastFlipTime": "Past flip time",
         "globalTriggers": "Global Triggers",
         "systemWideAutomation": "System-wide automation rules",
         "global": "GLOBAL",
