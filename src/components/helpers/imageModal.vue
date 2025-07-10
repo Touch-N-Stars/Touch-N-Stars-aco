@@ -1,56 +1,65 @@
 <template>
-  <!-- Nur anzeigen, wenn showModal true ist -->
-  <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center">
-    <!-- Halbtransparenter Overlay-Hintergrund -->
-    <div class="absolute inset-0 bg-black bg-opacity-70" @click="closeModal"></div>
-    <div v-if="isLoading">
-      <!-- Spinner -->
-      <div class="flex items-center justify-center w-full h-full">
+  <!-- Full screen modal with highest z-index -->
+  <Teleport to="body" v-if="showModal">
+    <div class="fixed inset-0 z-[9999] flex items-center justify-center">
+      <!-- Halbtransparenter Overlay-Hintergrund -->
+      <div class="absolute inset-0 bg-black bg-opacity-70" @click="closeModal"></div>
+
+      <div v-if="isLoading" class="relative z-[10000]">
+        <!-- Spinner -->
+        <div class="flex items-center justify-center w-full h-full">
+          <div
+            class="w-12 h-12 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Inhalt der Modal -->
+      <div
+        v-else
+        class="relative w-full h-full bg-gray-900 z-[10000] flex items-center justify-center"
+      >
+        <button
+          class="absolute rounded-full h-8 w-8 shadow-lg shadow-black flex justify-center items-center bg-gray-800 top-4 right-4 text-white hover:text-gray-300 text-2xl font-extrabold z-[10001]"
+          @click="closeModal"
+          :aria-label="$t('components.imageModal.close')"
+        >
+          ✕
+        </button>
+
+        <!-- Zoom Overlay -->
         <div
-          class="w-12 h-12 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"
-        ></div>
-      </div>
-    </div>
-    <!-- Inhalt der Modal -->
-    <div v-else class="relative w-full h-full bg-gray-900 z-60 flex items-center justify-center">
-      <button
-        class="absolute rounded-full h-8 w-8 shadow-lg shadow-black flex justify-center items-center bg-gray-800 top-4 right-4 text-white hover:text-gray-300 text-2xl font-extrabold z-70"
-        @click="closeModal"
-        aria-label="Schließen"
-      >
-        ✕
-      </button>
+          class="absolute top-4 left-4 shadow-lg shadow-black bg-gray-800 text-white text-sm px-3 py-1 rounded-lg z-[10001] pointer-events-none"
+        >
+          {{ $t('components.imageModal.zoom') }}: {{ zoomLevel.toFixed(2) }}x
+        </div>
 
-      <!-- Zoom Overlay -->
-      <div
-        class="absolute top-4 left-4 shadow-lg shadow-black bg-gray-800 text-white text-sm px-3 py-1 rounded-lg z-[100] pointer-events-none"
-      >
-        Zoom: {{ zoomLevel.toFixed(2) }}x
-      </div>
-      <!-- Download Button -->
-      <button
-        v-if="imageData"
-        @click="downloadImage"
-        class="absolute top-4 right-20 rounded-lg bg-gray-800 text-white text-sm px-3 py-1 shadow-lg shadow-black hover:bg-gray-700 transition z-[100]"
-      >
-        <ArrowDownTrayIcon class="h-6" />
-      </button>
-
-      <div
-        ref="imageContainer"
-        class="w-full h-full overflow-hidden relative flex items-center justify-center shadow-md shadow-cyan-900"
-      >
-        <img
+        <!-- Download Button -->
+        <button
           v-if="imageData"
-          :src="imageData"
-          ref="image"
-          @load="onImageLoad"
-          class="w-full h-full object-contain cursor-move"
-          alt="Vergrößertes Bild"
-        />
+          @click="downloadImage"
+          class="absolute top-4 right-20 rounded-lg bg-gray-800 text-white text-sm px-3 py-1 shadow-lg shadow-black hover:bg-gray-700 transition z-[10001]"
+          :title="$t('components.imageModal.download')"
+        >
+          <ArrowDownTrayIcon class="h-6" />
+        </button>
+
+        <div
+          ref="imageContainer"
+          class="w-full h-full overflow-hidden relative flex items-center justify-center shadow-md shadow-cyan-900"
+        >
+          <img
+            v-if="imageData"
+            :src="imageData"
+            ref="image"
+            @load="onImageLoad"
+            class="w-full h-full object-contain cursor-move"
+            :alt="$t('components.imageModal.enlargedImage')"
+          />
+        </div>
       </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <script setup>

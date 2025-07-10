@@ -665,6 +665,12 @@
         "message": "No sequence loaded"
       },
       "enter_name": "Enter name"
+    },
+    "imageModal": {
+      "close": "Close",
+      "download": "Download Image",
+      "zoom": "Zoom",
+      "enlargedImage": "Enlarged Image"
     }
   }
 }

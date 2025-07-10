@@ -227,7 +227,7 @@
   <!-- Enhanced Floating Settings Button -->
   <button
     type="button"
-    class="fixed bottom-6 right-6 z-20 p-4 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group"
+    class="fixed bottom-20 right-6 z-20 p-4 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group"
     @click="showSettingsModal = true"
     aria-label="Open settings"
   >
