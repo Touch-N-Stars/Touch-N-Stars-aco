@@ -158,6 +158,25 @@
         </div>
       </div>
 
+      <!-- Sequence Tree Card -->
+      <div
+        class="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 shadow-2xl"
+      >
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold text-gray-100">Sequence Structure</h2>
+          <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+        <SequenzGraph />
+      </div>
+
       <!-- Enhanced Monitoring Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Current Sequence Image Card -->
@@ -200,25 +219,6 @@
             </div>
           </div>
           <SequenceImageHistory />
-        </div>
-
-        <!-- Sequence Tree Card -->
-        <div
-          class="lg:col-span-2 bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 shadow-2xl"
-        >
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-semibold text-gray-100">Sequence Structure</h2>
-            <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
-              <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fill-rule="evenodd"
-                  d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </div>
-          </div>
-          <SequenzGraph />
         </div>
       </div>
     </div>
