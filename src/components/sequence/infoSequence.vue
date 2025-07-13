@@ -140,25 +140,6 @@
               </div>
             </div>
             <div class="flex items-center space-x-3">
-              <!-- Progress indicator for this container -->
-              <div v-if="container.Items && container.Items.length" class="text-right">
-                <div class="text-xs text-gray-400">
-                  {{ getContainerProgress(container) }}%
-                  {{ $t('components.sequence.status.complete') }}
-                </div>
-                <div class="w-20 bg-gray-700 rounded-full h-1 mt-1">
-                  <div
-                    class="h-1 rounded-full transition-all duration-500"
-                    :class="
-                      statusColor(container.Status)
-                        .replace('bg-', 'bg-')
-                        .replace(' text-', ' ')
-                        .split(' ')[0]
-                    "
-                    :style="`width: ${getContainerProgress(container)}%`"
-                  ></div>
-                </div>
-              </div>
               <div
                 class="px-4 py-2 font-medium rounded-full text-sm border transition-all duration-200"
                 :class="statusColor(container.Status) + ' border-current/30'"
@@ -227,65 +208,6 @@ function statusColor(status) {
     default:
       return 'bg-gray-600 text-gray-100';
   }
-}
-
-function calculateContainerProgress(container) {
-  if (container.Status === 'FINISHED') {
-    return 100;
-  }
-
-  if (container.Status === 'DISABLED') {
-    return 0; // Don't count disabled items
-  }
-
-  if (!container.Items || container.Items.length === 0) {
-    // Leaf item - base on status
-    switch (container.Status) {
-      case 'FINISHED':
-        return 100;
-      case 'RUNNING':
-        return 50; // Or calculate based on sub-progress
-      case 'CREATED':
-        return 0;
-      default:
-        return 0;
-    }
-  }
-
-  // Container with sub-items - calculate based on sub-item progress
-  const { total, completed } = countItemsProgress(container.Items);
-  return total > 0 ? Math.round((completed / total) * 100) : 0;
-}
-
-function countItemsProgress(items) {
-  let total = 0;
-  let completed = 0;
-
-  items.forEach((item) => {
-    // Skip disabled items from progress calculation
-    if (item.Status === 'DISABLED') return;
-
-    total++;
-    if (item.Status === 'FINISHED') {
-      completed++;
-    } else if (item.Items && item.Items.length > 0) {
-      // For containers with sub-items, calculate weighted progress
-      const { total: subTotal, completed: subCompleted } = countItemsProgress(item.Items);
-      if (subTotal > 0) {
-        // Subtract the 1 we added above and add weighted progress
-        total--;
-        total += subTotal;
-        completed += subCompleted;
-      }
-    }
-  });
-
-  return { total, completed };
-}
-
-function getContainerProgress(container) {
-  // Use the new container progress calculation
-  return calculateContainerProgress(container);
 }
 
 function getContainerDescription(name) {

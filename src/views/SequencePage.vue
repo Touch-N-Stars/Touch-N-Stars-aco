@@ -35,11 +35,14 @@
     </div>
 
     <!-- Floating Action Buttons -->
-    <div class="fixed right-6 z-20" style="bottom: calc(env(safe-area-inset-bottom, 0px) + 80px)">
+    <div
+      class="fixed right-6 z-20"
+      style="bottom: max(5rem, env(safe-area-inset-bottom, 0px) + 4rem)"
+    >
       <div class="flex flex-col space-y-3">
         <FavTargets
           :show-framning="false"
-          class="transform transition-all duration-300 hover:scale-105"
+          class="transform transition-all duration-300 hover:scale-110"
         />
 
         <button

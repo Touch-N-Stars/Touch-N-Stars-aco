@@ -5,11 +5,6 @@
         {{ $t('components.framing.search.title') }}
       </h5>
 
-      <FavTargets
-        :showSeqTarget="false"
-        class="fixed right-5 z-20"
-        style="bottom: calc(env(safe-area-inset-bottom, 0px) + 48px)"
-      />
       <!-- Search Input -->
       <div class="text-black mx-auto">
         <div class="flex gap-1">
@@ -170,7 +165,6 @@ import FramingAssistangModal from '@/components/framing/FramingAssistangModal.vu
 import { useFramingStore } from '@/store/framingStore';
 import { useSettingsStore } from '@/store/settingsStore';
 import SkyChart from '@/components/framing/SkyChart.vue';
-import FavTargets from '@/components/favTargets/FavTargets.vue';
 import SaveFavTargets from '@/components/favTargets/SaveFavTargets.vue';
 
 const framingStore = useFramingStore();

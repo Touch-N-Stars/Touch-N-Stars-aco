@@ -28,21 +28,22 @@
       <div v-show="!sequenceStore.isCollapsed(item._path)">
         <!-- Header Section -->
         <div
-          class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2 border-b border-gray-600"
+          class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2 border-b border-gray-600 min-h-[2rem]"
         >
           <span
             v-if="isTopLevel || item.Status === 'DISABLED'"
             :class="statusColor(item.Status)"
-            class="font-medium text-xs md:text-sm shrink-0"
+            class="font-medium text-xs md:text-sm shrink-0 px-2 py-1 rounded-md bg-gray-700/50 border border-gray-600 max-w-full truncate"
           >
             {{ item.Status }}
           </span>
           <button
             v-if="sequenceStore.sequenceEdit && containerIndex === 1 && !readOnly"
             @click="toggleDisable(item._path, item.Status, 'Status')"
+            class="shrink-0 p-1 rounded hover:bg-gray-700 transition-colors"
           >
             <PowerIcon
-              class="w-5 h-5"
+              class="w-4 h-4 md:w-5 md:h-5"
               :class="item.Status === 'DISABLED' ? 'text-red-500' : 'text-green-500'"
             />
           </button>
@@ -86,27 +87,30 @@
               :key="tIndex"
               class="bg-gray-700 rounded p-2 md:p-3 border border-gray-600"
             >
-              <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                <span class="text-sm font-medium text-gray-200 break-all">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-2 min-h-[2rem]">
+                <span class="text-sm font-medium text-gray-200 break-all flex-1 min-w-0">
                   {{ removeSuffix(trigger.Name) }}
                 </span>
-                <span
-                  v-if="trigger.Status != 'CREATED'"
-                  :class="statusColor(trigger.Status)"
-                  class="text-xs md:text-sm"
-                >
-                  {{ trigger.Status }}
-                </span>
+                <div class="flex items-center gap-2 shrink-0">
+                  <span
+                    v-if="trigger.Status != 'CREATED'"
+                    :class="statusColor(trigger.Status)"
+                    class="text-xs md:text-sm px-2 py-1 rounded-md bg-gray-600/50 border border-gray-500 whitespace-nowrap"
+                  >
+                    {{ trigger.Status }}
+                  </span>
 
-                <button
-                  v-if="sequenceStore.sequenceEdit && containerIndex === 1 && !readOnly"
-                  @click="toggleDisable(trigger._path, trigger.Status, 'Status')"
-                >
-                  <PowerIcon
-                    class="w-5 h-5"
-                    :class="trigger.Status === 'DISABLED' ? 'text-red-500' : 'text-green-500'"
-                  />
-                </button>
+                  <button
+                    v-if="sequenceStore.sequenceEdit && containerIndex === 1 && !readOnly"
+                    @click="toggleDisable(trigger._path, trigger.Status, 'Status')"
+                    class="p-1 rounded hover:bg-gray-600 transition-colors"
+                  >
+                    <PowerIcon
+                      class="w-4 h-4 md:w-5 md:h-5"
+                      :class="trigger.Status === 'DISABLED' ? 'text-red-500' : 'text-green-500'"
+                    />
+                  </button>
+                </div>
               </div>
 
               <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs md:text-sm">
@@ -162,26 +166,29 @@
               :key="cIndex"
               class="bg-gray-700 rounded p-2 md:p-3 border border-gray-600"
             >
-              <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                <span class="text-sm font-medium text-gray-200 break-all">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-2 min-h-[2rem]">
+                <span class="text-sm font-medium text-gray-200 break-all flex-1 min-w-0">
                   {{ removeSuffix(condition.Name) }}
                 </span>
-                <span
-                  v-if="condition.Status != 'CREATED'"
-                  :class="statusColor(condition.Status)"
-                  class="text-xs md:text-sm"
-                >
-                  {{ condition.Status }}
-                </span>
-                <button
-                  v-if="sequenceStore.sequenceEdit && containerIndex === 1 && !readOnly"
-                  @click="toggleDisable(condition._path, condition.Status, 'Status')"
-                >
-                  <PowerIcon
-                    class="w-5 h-5"
-                    :class="condition.Status === 'DISABLED' ? 'text-red-500' : 'text-green-500'"
-                  />
-                </button>
+                <div class="flex items-center gap-2 shrink-0">
+                  <span
+                    v-if="condition.Status != 'CREATED'"
+                    :class="statusColor(condition.Status)"
+                    class="text-xs md:text-sm px-2 py-1 rounded-md bg-gray-600/50 border border-gray-500 whitespace-nowrap"
+                  >
+                    {{ condition.Status }}
+                  </span>
+                  <button
+                    v-if="sequenceStore.sequenceEdit && containerIndex === 1 && !readOnly"
+                    @click="toggleDisable(condition._path, condition.Status, 'Status')"
+                    class="p-1 rounded hover:bg-gray-600 transition-colors"
+                  >
+                    <PowerIcon
+                      class="w-4 h-4 md:w-5 md:h-5"
+                      :class="condition.Status === 'DISABLED' ? 'text-red-500' : 'text-green-500'"
+                    />
+                  </button>
+                </div>
               </div>
               <div class="grid grid-cols-1 gap-2 text-xs md:text-sm">
                 <div
@@ -645,5 +652,46 @@ watch(
 }
 .glow-red {
   box-shadow: 0 0 10px rgb(255, 0, 0);
+}
+
+/* Responsive badge styling */
+@media (max-width: 640px) {
+  .status-badge {
+    font-size: 0.65rem;
+    padding: 0.25rem 0.5rem;
+    max-width: 5rem;
+  }
+
+  .header-section {
+    min-height: 2.5rem;
+  }
+
+  .power-button {
+    padding: 0.25rem;
+  }
+}
+
+/* Ensure badges don't overflow container */
+.container-wrapper {
+  overflow: hidden;
+}
+
+.badge-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.badge-container > * {
+  flex-shrink: 0;
+}
+
+/* Text truncation for long names */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
